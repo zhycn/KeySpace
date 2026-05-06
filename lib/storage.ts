@@ -1,4 +1,4 @@
-import type { ClickRecord, UserStorage } from "./types";
+import type { ClickRecord, FavoriteItem, UserStorage } from "./types";
 
 const STORAGE_KEY = "keyspace-user-data";
 
@@ -48,13 +48,15 @@ export function addClickRecord(
   return data.clickHistory;
 }
 
-export function toggleFavorite(keyword: string): string[] {
+export function toggleFavorite(keyword: string, categoryId: string): FavoriteItem[] {
   const data = loadUserData();
-  const idx = data.favorites.indexOf(keyword);
+  const idx = data.favorites.findIndex(
+    (f) => f.keyword === keyword && f.categoryId === categoryId,
+  );
   if (idx >= 0) {
     data.favorites.splice(idx, 1);
   } else {
-    data.favorites.push(keyword);
+    data.favorites.push({ keyword, categoryId });
   }
   saveUserData(data);
   return data.favorites;

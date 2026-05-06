@@ -10,8 +10,8 @@ interface KeywordTagProps {
 }
 
 export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
-  const { favorites, handleToggleFavorite, handleKeywordClick } = useApp();
-  const isFav = favorites.includes(keyword);
+  const { isFavorite, handleToggleFavorite, handleKeywordClick } = useApp();
+  const fav = isFavorite(keyword, categoryId);
 
   return (
     <Badge
@@ -25,13 +25,19 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
       >
         {keyword}
       </button>
-      <Star
-        className={`h-3 w-3 shrink-0 ${isFav ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
+      <button
+        type="button"
+        className="bg-transparent p-0 border-0 cursor-pointer"
+        aria-label={fav ? "取消收藏" : "添加收藏"}
         onClick={(e) => {
           e.stopPropagation();
-          handleToggleFavorite(keyword);
+          handleToggleFavorite(keyword, categoryId);
         }}
-      />
+      >
+        <Star
+          className={`h-3 w-3 shrink-0 ${fav ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
+        />
+      </button>
     </Badge>
   );
 }

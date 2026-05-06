@@ -18,6 +18,7 @@ import {
 import type {
   Category,
   ClickRecord,
+  FavoriteItem,
   SearchEngine,
   ViewMode,
 } from "@/lib/types";
@@ -28,7 +29,7 @@ interface AppState {
   searchQuery: string;
   categories: Category[];
   engines: SearchEngine[];
-  favorites: string[];
+  favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
   sidebarCollapsed: boolean;
@@ -39,7 +40,8 @@ interface AppActions {
   setCurrentCategoryId: (id: string | null) => void;
   setSearchQuery: (q: string) => void;
   handleKeywordClick: (keyword: string, categoryId: string) => void;
-  handleToggleFavorite: (keyword: string) => void;
+  handleToggleFavorite: (keyword: string, categoryId: string) => void;
+  isFavorite: (keyword: string, categoryId: string) => boolean;
   handleRemoveClickRecord: (keyword: string, categoryId: string) => void;
   handleSetEngine: (engineId: string) => void;
   handleSetSidebarCollapsed: (collapsed: boolean) => void;
@@ -73,7 +75,7 @@ export function AppProvider({
     null,
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [clickHistory, setClickHistory] = useState<ClickRecord[]>([]);
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
@@ -102,10 +104,21 @@ export function AppProvider({
     [engines, selectedEngineId],
   );
 
-  const handleToggleFavorite = useCallback((keyword: string) => {
-    const updated = toggleFavorite(keyword);
-    setFavorites([...updated]);
-  }, []);
+  const handleToggleFavorite = useCallback(
+    (keyword: string, categoryId: string) => {
+      const updated = toggleFavorite(keyword, categoryId);
+      setFavorites([...updated]);
+    },
+    [],
+  );
+
+  const isFavorite = useCallback(
+    (keyword: string, categoryId: string) =>
+      favorites.some(
+        (f) => f.keyword === keyword && f.categoryId === categoryId,
+      ),
+    [favorites],
+  );
 
   const handleRemoveClickRecord = useCallback(
     (keyword: string, categoryId: string) => {
@@ -142,6 +155,7 @@ export function AppProvider({
         setSearchQuery,
         handleKeywordClick,
         handleToggleFavorite,
+        isFavorite,
         handleRemoveClickRecord,
         handleSetEngine,
         handleSetSidebarCollapsed,

@@ -28,8 +28,13 @@ export interface ClickRecord {
   clickCount: number;
 }
 
+export interface FavoriteItem {
+  keyword: string;
+  categoryId: string;
+}
+
 export interface UserStorage {
-  favorites: string[];
+  favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
   sidebarCollapsed: boolean;

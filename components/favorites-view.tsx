@@ -6,11 +6,14 @@ import { useApp } from "@/components/app-provider";
 import { KeywordTag } from "@/components/keyword-tag";
 
 export function FavoritesView() {
-  const { favorites, categories, searchQuery } = useApp();
+  const { favorites, searchQuery } = useApp();
 
   const filtered = useMemo(() => {
     if (!searchQuery.trim()) return favorites;
-    const fuse = new Fuse(favorites, { threshold: 0.3 });
+    const fuse = new Fuse(favorites, {
+      threshold: 0.3,
+      keys: ["keyword"],
+    });
     return fuse.search(searchQuery).map((r) => r.item);
   }, [favorites, searchQuery]);
 
@@ -25,11 +28,11 @@ export function FavoritesView() {
         </p>
       ) : (
         <div className="flex flex-wrap gap-2">
-          {filtered.map((kw) => (
+          {filtered.map((fav) => (
             <KeywordTag
-              key={kw}
-              keyword={kw}
-              categoryId={categories[0]?.id ?? ""}
+              key={`${fav.keyword}-${fav.categoryId}`}
+              keyword={fav.keyword}
+              categoryId={fav.categoryId}
             />
           ))}
         </div>
