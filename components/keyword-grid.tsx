@@ -21,7 +21,9 @@ export function KeywordGrid({ keywords, categoryId }: KeywordGridProps) {
 
   if (filtered.length === 0) {
     return (
-      <p className="text-muted-foreground py-8 text-center">没有匹配的关键词</p>
+      <div className="flex flex-col items-center gap-2 py-12">
+        <p className="text-muted-foreground">没有匹配的关键词</p>
+      </div>
     );
   }
 

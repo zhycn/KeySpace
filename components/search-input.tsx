@@ -1,22 +1,40 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useApp } from "@/components/app-provider";
-import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 export function SearchInput() {
   const { searchQuery, setSearchQuery } = useApp();
+  const hasQuery = searchQuery.length > 0;
 
   return (
-    <div className="relative">
-      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <Input
+    <InputGroup>
+      <InputGroupAddon align="inline-start">
+        <Search />
+      </InputGroupAddon>
+      <InputGroupInput
         aria-label="搜索关键词"
         placeholder="搜索关键词..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="pl-9"
       />
-    </div>
+      {hasQuery && (
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            size="icon-xs"
+            aria-label="清除搜索"
+            onClick={() => setSearchQuery("")}
+          >
+            <X />
+          </InputGroupButton>
+        </InputGroupAddon>
+      )}
+    </InputGroup>
   );
 }

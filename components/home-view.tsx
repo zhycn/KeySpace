@@ -5,7 +5,9 @@ import { Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useApp } from "@/components/app-provider";
 import { KeywordTag } from "@/components/keyword-tag";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function HomeView() {
   const { clickHistory, handleRemoveClickRecord, searchQuery } = useApp();
@@ -31,47 +33,44 @@ export function HomeView() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">
             {sortMode === "count" ? "热门关键词" : "最近点击"}
           </h2>
-          <div className="flex gap-2">
-            <Button
-              variant={sortMode === "count" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSortMode("count")}
-              aria-pressed={sortMode === "count"}
-            >
-              按点击数
-            </Button>
-            <Button
-              variant={sortMode === "recent" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSortMode("recent")}
-              aria-pressed={sortMode === "recent"}
-            >
-              按最新
-            </Button>
-          </div>
+          <ToggleGroup
+            type="single"
+            value={sortMode}
+            onValueChange={(v) => {
+              if (v) setSortMode(v as "count" | "recent");
+            }}
+            variant="outline"
+            size="sm"
+          >
+            <ToggleGroupItem value="count">按点击数</ToggleGroupItem>
+            <ToggleGroupItem value="recent">按最新</ToggleGroupItem>
+          </ToggleGroup>
         </div>
         {filtered.length === 0 ? (
-          <p className="text-muted-foreground">
-            {clickHistory.length === 0
-              ? "暂无点击记录，点击关键词开始使用"
-              : "没有匹配的关键词"}
-          </p>
+          <div className="flex flex-col items-center gap-2 py-12">
+            <p className="text-muted-foreground">
+              {clickHistory.length === 0 ? "暂无点击记录" : "没有匹配的关键词"}
+            </p>
+            {clickHistory.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                点击关键词开始使用
+              </p>
+            )}
+          </div>
         ) : (
           <div className="flex flex-wrap gap-2">
             {filtered.map((r) => (
               <div
                 key={`${r.keyword}-${r.categoryId}`}
-                className="group relative inline-flex items-center gap-1"
+                className="group inline-flex items-center gap-1.5"
               >
                 <KeywordTag keyword={r.keyword} categoryId={r.categoryId} />
-                <span className="text-xs text-muted-foreground">
-                  {r.clickCount}次
-                </span>
+                <Badge variant="secondary">{r.clickCount}次</Badge>
                 <Button
                   variant="destructive"
                   size="icon"
