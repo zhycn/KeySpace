@@ -76,12 +76,14 @@ export function AppProvider({
   const [clickHistory, setClickHistory] = useState<ClickRecord[]>([]);
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const data = loadUserData();
     setFavorites(data.favorites);
     setClickHistory(data.clickHistory);
     setSelectedEngineIdState(data.selectedEngineId || defaultEngineId);
+    setMounted(true);
   }, [defaultEngineId]);
 
   const handleKeywordClick = useCallback(
@@ -149,7 +151,7 @@ export function AppProvider({
         handleSetEngine,
       }}
     >
-      {children}
+      {mounted ? children : null}
     </AppContext.Provider>
   );
 }
