@@ -18,16 +18,14 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
     <div className="inline-flex items-center -space-x-px">
       <Button
         variant="outline"
-        size="sm"
-        className="rounded-r-none pr-2"
+        className="h-8 rounded-r-none pr-2"
         onClick={() => handleKeywordClick(keyword, categoryId)}
       >
         {keyword}
       </Button>
       <Button
         variant="outline"
-        size="icon-xs"
-        className="rounded-l-none border-l-0"
+        className="h-8 w-8 rounded-l-none border-l-0"
         aria-label={fav ? "取消收藏" : "添加收藏"}
         onClick={() => handleToggleFavorite(keyword, categoryId)}
       >
