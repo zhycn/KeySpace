@@ -1,5 +1,6 @@
 "use client";
 
+import Fuse from "fuse.js";
 import { Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useApp } from "@/components/app-provider";
@@ -7,7 +8,7 @@ import { KeywordTag } from "@/components/keyword-tag";
 import { Button } from "@/components/ui/button";
 
 export function HomeView() {
-  const { clickHistory, handleRemoveClickRecord } = useApp();
+  const { clickHistory, handleRemoveClickRecord, searchQuery } = useApp();
   const [sortMode, setSortMode] = useState<"count" | "recent">("count");
 
   const topKeywords = useMemo(() => {
@@ -18,6 +19,15 @@ export function HomeView() {
     );
     return sorted.slice(0, 30);
   }, [clickHistory, sortMode]);
+
+  const filtered = useMemo(() => {
+    if (!searchQuery.trim()) return topKeywords;
+    const fuse = new Fuse(topKeywords, {
+      threshold: 0.3,
+      keys: ["keyword"],
+    });
+    return fuse.search(searchQuery).map((r) => r.item);
+  }, [topKeywords, searchQuery]);
 
   return (
     <div className="space-y-8">
@@ -31,6 +41,7 @@ export function HomeView() {
               variant={sortMode === "count" ? "default" : "outline"}
               size="sm"
               onClick={() => setSortMode("count")}
+              aria-pressed={sortMode === "count"}
             >
               按点击数
             </Button>
@@ -38,18 +49,21 @@ export function HomeView() {
               variant={sortMode === "recent" ? "default" : "outline"}
               size="sm"
               onClick={() => setSortMode("recent")}
+              aria-pressed={sortMode === "recent"}
             >
               按最新
             </Button>
           </div>
         </div>
-        {topKeywords.length === 0 ? (
+        {filtered.length === 0 ? (
           <p className="text-muted-foreground">
-            暂无点击记录，点击关键词开始使用
+            {clickHistory.length === 0
+              ? "暂无点击记录，点击关键词开始使用"
+              : "没有匹配的关键词"}
           </p>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {topKeywords.map((r) => (
+            {filtered.map((r) => (
               <div
                 key={`${r.keyword}-${r.categoryId}`}
                 className="group relative inline-flex items-center gap-1"
@@ -60,7 +74,8 @@ export function HomeView() {
                 </span>
                 <button
                   type="button"
-                  className="hidden group-hover:flex items-center justify-center rounded-full bg-destructive text-destructive-foreground p-0.5"
+                  aria-label="删除记录"
+                  className="hidden group-hover:flex group-focus-within:flex items-center justify-center rounded-full bg-destructive text-destructive-foreground p-0.5"
                   onClick={() =>
                     handleRemoveClickRecord(r.keyword, r.categoryId)
                   }

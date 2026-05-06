@@ -21,6 +21,7 @@ export function AppSidebar() {
     currentCategoryId,
     setViewMode,
     setCurrentCategoryId,
+    setSearchQuery,
   } = useApp();
 
   return (
@@ -35,7 +36,10 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   isActive={viewMode === "home"}
-                  onClick={() => setViewMode("home")}
+                  onClick={() => {
+                    setViewMode("home");
+                    setSearchQuery("");
+                  }}
                 >
                   <Home />
                   <span>首页</span>
@@ -44,7 +48,10 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   isActive={viewMode === "favorites"}
-                  onClick={() => setViewMode("favorites")}
+                  onClick={() => {
+                    setViewMode("favorites");
+                    setSearchQuery("");
+                  }}
                 >
                   <Star />
                   <span>收藏</span>
@@ -66,6 +73,7 @@ export function AppSidebar() {
                     onClick={() => {
                       setCurrentCategoryId(cat.id);
                       setViewMode("category");
+                      setSearchQuery("");
                     }}
                   >
                     <FolderOpen />
