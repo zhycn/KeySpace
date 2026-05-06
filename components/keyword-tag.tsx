@@ -1,8 +1,8 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useApp } from "@/components/app-provider";
+import { Badge } from "@/components/ui/badge";
 
 interface KeywordTagProps {
   keyword: string;
@@ -18,7 +18,13 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
       variant="outline"
       className="cursor-pointer gap-1 px-3 py-1.5 text-sm hover:bg-accent transition-colors select-none"
     >
-      <span onClick={() => handleKeywordClick(keyword, categoryId)}>{keyword}</span>
+      <button
+        type="button"
+        className="bg-transparent p-0 border-0 text-inherit cursor-pointer"
+        onClick={() => handleKeywordClick(keyword, categoryId)}
+      >
+        {keyword}
+      </button>
       <Star
         className={`h-3 w-3 shrink-0 ${isFav ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
         onClick={(e) => {

@@ -1,8 +1,8 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useApp } from "@/components/app-provider";
+import { Input } from "@/components/ui/input";
 
 export function SearchInput() {
   const { searchQuery, setSearchQuery } = useApp();

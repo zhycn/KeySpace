@@ -1,7 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import type { Category, ClickRecord, SearchEngine, ViewMode } from "@/lib/types";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   addClickRecord,
   loadUserData,
@@ -10,6 +15,12 @@ import {
   setSidebarCollapsed,
   toggleFavorite,
 } from "@/lib/storage";
+import type {
+  Category,
+  ClickRecord,
+  SearchEngine,
+  ViewMode,
+} from "@/lib/types";
 
 interface AppState {
   viewMode: ViewMode;
@@ -51,13 +62,21 @@ interface AppProviderProps {
   children: React.ReactNode;
 }
 
-export function AppProvider({ categories, engines, defaultEngineId, children }: AppProviderProps) {
+export function AppProvider({
+  categories,
+  engines,
+  defaultEngineId,
+  children,
+}: AppProviderProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("home");
-  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(null);
+  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(
+    null,
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [clickHistory, setClickHistory] = useState<ClickRecord[]>([]);
-  const [selectedEngineId, setSelectedEngineIdState] = useState(defaultEngineId);
+  const [selectedEngineId, setSelectedEngineIdState] =
+    useState(defaultEngineId);
   const [sidebarCollapsed, setSidebarCollapsedState] = useState(false);
 
   useEffect(() => {
@@ -70,8 +89,12 @@ export function AppProvider({ categories, engines, defaultEngineId, children }: 
 
   const handleKeywordClick = useCallback(
     (keyword: string, categoryId: string) => {
-      const engine = engines.find((e) => e.id === selectedEngineId) || engines[0];
-      const url = engine.urlTemplate.replace("{keyword}", encodeURIComponent(keyword));
+      const engine =
+        engines.find((e) => e.id === selectedEngineId) || engines[0];
+      const url = engine.urlTemplate.replace(
+        "{keyword}",
+        encodeURIComponent(keyword),
+      );
       window.open(url, "_blank");
       const updated = addClickRecord(keyword, categoryId);
       setClickHistory([...updated]);
@@ -84,10 +107,13 @@ export function AppProvider({ categories, engines, defaultEngineId, children }: 
     setFavorites([...updated]);
   }, []);
 
-  const handleRemoveClickRecord = useCallback((keyword: string, categoryId: string) => {
-    const updated = removeClickRecord(keyword, categoryId);
-    setClickHistory([...updated]);
-  }, []);
+  const handleRemoveClickRecord = useCallback(
+    (keyword: string, categoryId: string) => {
+      const updated = removeClickRecord(keyword, categoryId);
+      setClickHistory([...updated]);
+    },
+    [],
+  );
 
   const handleSetEngine = useCallback((engineId: string) => {
     setSelectedEngine(engineId);

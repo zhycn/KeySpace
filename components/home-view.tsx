@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { KeywordTag } from "@/components/keyword-tag";
+import { useMemo, useState } from "react";
 import { useApp } from "@/components/app-provider";
+import { KeywordTag } from "@/components/keyword-tag";
+import { Button } from "@/components/ui/button";
 
 export function HomeView() {
   const { clickHistory, handleRemoveClickRecord } = useApp();
@@ -12,7 +12,9 @@ export function HomeView() {
 
   const topKeywords = useMemo(() => {
     const sorted = [...clickHistory].sort((a, b) =>
-      sortMode === "count" ? b.clickCount - a.clickCount : b.clickedAt - a.clickedAt,
+      sortMode === "count"
+        ? b.clickCount - a.clickCount
+        : b.clickedAt - a.clickedAt,
     );
     return sorted.slice(0, 30);
   }, [clickHistory, sortMode]);
@@ -42,16 +44,26 @@ export function HomeView() {
           </div>
         </div>
         {topKeywords.length === 0 ? (
-          <p className="text-muted-foreground">暂无点击记录，点击关键词开始使用</p>
+          <p className="text-muted-foreground">
+            暂无点击记录，点击关键词开始使用
+          </p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {topKeywords.map((r) => (
-              <div key={`${r.keyword}-${r.categoryId}`} className="group relative inline-flex items-center gap-1">
+              <div
+                key={`${r.keyword}-${r.categoryId}`}
+                className="group relative inline-flex items-center gap-1"
+              >
                 <KeywordTag keyword={r.keyword} categoryId={r.categoryId} />
-                <span className="text-xs text-muted-foreground">{r.clickCount}次</span>
+                <span className="text-xs text-muted-foreground">
+                  {r.clickCount}次
+                </span>
                 <button
+                  type="button"
                   className="hidden group-hover:flex items-center justify-center rounded-full bg-destructive text-destructive-foreground p-0.5"
-                  onClick={() => handleRemoveClickRecord(r.keyword, r.categoryId)}
+                  onClick={() =>
+                    handleRemoveClickRecord(r.keyword, r.categoryId)
+                  }
                 >
                   <Trash2 className="h-3 w-3" />
                 </button>

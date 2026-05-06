@@ -25,7 +25,10 @@ export function saveUserData(data: UserStorage): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-export function addClickRecord(keyword: string, categoryId: string): ClickRecord[] {
+export function addClickRecord(
+  keyword: string,
+  categoryId: string,
+): ClickRecord[] {
   const data = loadUserData();
   const existing = data.clickHistory.find(
     (r) => r.keyword === keyword && r.categoryId === categoryId,
@@ -57,7 +60,10 @@ export function toggleFavorite(keyword: string): string[] {
   return data.favorites;
 }
 
-export function removeClickRecord(keyword: string, categoryId: string): ClickRecord[] {
+export function removeClickRecord(
+  keyword: string,
+  categoryId: string,
+): ClickRecord[] {
   const data = loadUserData();
   data.clickHistory = data.clickHistory.filter(
     (r) => !(r.keyword === keyword && r.categoryId === categoryId),

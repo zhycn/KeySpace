@@ -2,8 +2,8 @@
 
 import Fuse from "fuse.js";
 import { useMemo } from "react";
-import { KeywordTag } from "@/components/keyword-tag";
 import { useApp } from "@/components/app-provider";
+import { KeywordTag } from "@/components/keyword-tag";
 
 interface KeywordGridProps {
   keywords: string[];
@@ -20,7 +20,9 @@ export function KeywordGrid({ keywords, categoryId }: KeywordGridProps) {
   }, [keywords, searchQuery]);
 
   if (filtered.length === 0) {
-    return <p className="text-muted-foreground py-8 text-center">没有匹配的关键词</p>;
+    return (
+      <p className="text-muted-foreground py-8 text-center">没有匹配的关键词</p>
+    );
   }
 
   return (

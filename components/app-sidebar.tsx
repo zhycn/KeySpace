@@ -1,6 +1,7 @@
 "use client";
 
-import { Home, Star, FolderOpen } from "lucide-react";
+import { FolderOpen, Home, Star } from "lucide-react";
+import { useApp } from "@/components/app-provider";
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +13,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useApp } from "@/components/app-provider";
 
 export function AppSidebar() {
-  const { categories, viewMode, currentCategoryId, setViewMode, setCurrentCategoryId } = useApp();
+  const {
+    categories,
+    viewMode,
+    currentCategoryId,
+    setViewMode,
+    setCurrentCategoryId,
+  } = useApp();
 
   return (
     <Sidebar>
@@ -54,7 +60,9 @@ export function AppSidebar() {
               {categories.map((cat) => (
                 <SidebarMenuItem key={cat.id}>
                   <SidebarMenuButton
-                    isActive={viewMode === "category" && currentCategoryId === cat.id}
+                    isActive={
+                      viewMode === "category" && currentCategoryId === cat.id
+                    }
                     onClick={() => {
                       setCurrentCategoryId(cat.id);
                       setViewMode("category");

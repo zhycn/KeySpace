@@ -1,5 +1,6 @@
 "use client";
 
+import { useApp } from "@/components/app-provider";
 import {
   Select,
   SelectContent,
@@ -7,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useApp } from "@/components/app-provider";
 
 export function SearchEngineSelector() {
   const { engines, selectedEngineId, handleSetEngine } = useApp();
