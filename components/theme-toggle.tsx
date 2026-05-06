@@ -26,7 +26,7 @@ export function ThemeToggle() {
 
   return (
     <Button variant="ghost" size="icon" onClick={toggle} aria-label="切换主题">
-      {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      {dark ? <Sun /> : <Moon />}
     </Button>
   );
 }

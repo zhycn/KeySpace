@@ -3,6 +3,7 @@
 import { Star } from "lucide-react";
 import { useApp } from "@/components/app-provider";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface KeywordTagProps {
   keyword: string;
@@ -27,7 +28,8 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
       </button>
       <button
         type="button"
-        className="bg-transparent p-0 border-0 cursor-pointer ml-1"
+        data-icon="inline-end"
+        className="bg-transparent p-0 border-0 cursor-pointer"
         aria-label={fav ? "取消收藏" : "添加收藏"}
         onClick={(e) => {
           e.stopPropagation();
@@ -35,7 +37,12 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
         }}
       >
         <Star
-          className={`h-4 w-4 shrink-0 transition-colors ${fav ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground hover:text-yellow-400"}`}
+          className={cn(
+            "shrink-0 transition-colors",
+            fav
+              ? "fill-primary text-primary"
+              : "text-muted-foreground hover:text-primary",
+          )}
         />
       </button>
     </Badge>

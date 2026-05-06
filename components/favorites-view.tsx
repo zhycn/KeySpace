@@ -18,7 +18,7 @@ export function FavoritesView() {
   }, [favorites, searchQuery]);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold">收藏关键词</h2>
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">

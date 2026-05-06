@@ -4,6 +4,7 @@ import { useApp } from "@/components/app-provider";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -18,11 +19,13 @@ export function SearchEngineSelector() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {engines.map((engine) => (
-          <SelectItem key={engine.id} value={engine.id}>
-            {engine.name}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {engines.map((engine) => (
+            <SelectItem key={engine.id} value={engine.id}>
+              {engine.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );

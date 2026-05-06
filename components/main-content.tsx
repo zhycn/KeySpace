@@ -24,7 +24,7 @@ export function MainContent({ keywordsMap }: MainContentProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="flex h-14 items-center gap-4 border-b px-4">
+      <header className="flex h-14 items-center gap-4 px-4">
         <SidebarTrigger />
         <Separator orientation="vertical" className="h-6" />
         <div className="flex-1 max-w-md">
@@ -33,11 +33,12 @@ export function MainContent({ keywordsMap }: MainContentProps) {
         <SearchEngineSelector />
         <ThemeToggle />
       </header>
+      <Separator />
       <main className="flex-1 overflow-auto p-6">
         {viewMode === "home" && <HomeView />}
         {viewMode === "favorites" && <FavoritesView />}
         {viewMode === "category" && currentCategory && (
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <h2 className="text-lg font-semibold">{currentCategory.name}</h2>
             <KeywordGrid
               keywords={currentKeywords}

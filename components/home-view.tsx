@@ -30,7 +30,7 @@ export function HomeView() {
   }, [topKeywords, searchQuery]);
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">
@@ -72,16 +72,17 @@ export function HomeView() {
                 <span className="text-xs text-muted-foreground">
                   {r.clickCount}次
                 </span>
-                <button
-                  type="button"
+                <Button
+                  variant="destructive"
+                  size="icon"
                   aria-label="删除记录"
-                  className="hidden group-hover:flex group-focus-within:flex items-center justify-center rounded-full bg-destructive text-destructive-foreground p-0.5"
+                  className="hidden group-hover:flex group-focus-within:flex size-5 rounded-full"
                   onClick={() =>
                     handleRemoveClickRecord(r.keyword, r.categoryId)
                   }
                 >
-                  <Trash2 className="h-3 w-3" />
-                </button>
+                  <Trash2 />
+                </Button>
               </div>
             ))}
           </div>
