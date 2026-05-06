@@ -37,7 +37,6 @@ export interface UserStorage {
   favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
-  sidebarCollapsed: boolean;
 }
 
 export type ViewMode = "home" | "favorites" | "category";

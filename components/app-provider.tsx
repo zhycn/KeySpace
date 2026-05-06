@@ -12,7 +12,6 @@ import {
   loadUserData,
   removeClickRecord,
   setSelectedEngine,
-  setSidebarCollapsed,
   toggleFavorite,
 } from "@/lib/storage";
 import type {
@@ -32,7 +31,6 @@ interface AppState {
   favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
-  sidebarCollapsed: boolean;
 }
 
 interface AppActions {
@@ -44,7 +42,6 @@ interface AppActions {
   isFavorite: (keyword: string, categoryId: string) => boolean;
   handleRemoveClickRecord: (keyword: string, categoryId: string) => void;
   handleSetEngine: (engineId: string) => void;
-  handleSetSidebarCollapsed: (collapsed: boolean) => void;
 }
 
 type AppContextType = AppState & AppActions;
@@ -79,14 +76,12 @@ export function AppProvider({
   const [clickHistory, setClickHistory] = useState<ClickRecord[]>([]);
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
-  const [sidebarCollapsed, setSidebarCollapsedState] = useState(false);
 
   useEffect(() => {
     const data = loadUserData();
     setFavorites(data.favorites);
     setClickHistory(data.clickHistory);
     setSelectedEngineIdState(data.selectedEngineId || defaultEngineId);
-    setSidebarCollapsedState(data.sidebarCollapsed);
   }, [defaultEngineId]);
 
   const handleKeywordClick = useCallback(
@@ -133,11 +128,6 @@ export function AppProvider({
     setSelectedEngineIdState(engineId);
   }, []);
 
-  const handleSetSidebarCollapsed = useCallback((collapsed: boolean) => {
-    setSidebarCollapsed(collapsed);
-    setSidebarCollapsedState(collapsed);
-  }, []);
-
   return (
     <AppContext.Provider
       value={{
@@ -149,7 +139,6 @@ export function AppProvider({
         favorites,
         clickHistory,
         selectedEngineId,
-        sidebarCollapsed,
         setViewMode,
         setCurrentCategoryId,
         setSearchQuery,
@@ -158,7 +147,6 @@ export function AppProvider({
         isFavorite,
         handleRemoveClickRecord,
         handleSetEngine,
-        handleSetSidebarCollapsed,
       }}
     >
       {children}

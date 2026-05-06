@@ -11,6 +11,7 @@ export function SearchInput() {
     <div className="relative">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
+        aria-label="搜索关键词"
         placeholder="搜索关键词..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}

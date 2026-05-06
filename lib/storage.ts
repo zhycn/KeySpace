@@ -6,7 +6,6 @@ const defaultData: UserStorage = {
   favorites: [],
   clickHistory: [],
   selectedEngineId: "google",
-  sidebarCollapsed: false,
 };
 
 export function loadUserData(): UserStorage {
@@ -48,7 +47,10 @@ export function addClickRecord(
   return data.clickHistory;
 }
 
-export function toggleFavorite(keyword: string, categoryId: string): FavoriteItem[] {
+export function toggleFavorite(
+  keyword: string,
+  categoryId: string,
+): FavoriteItem[] {
   const data = loadUserData();
   const idx = data.favorites.findIndex(
     (f) => f.keyword === keyword && f.categoryId === categoryId,
@@ -77,11 +79,5 @@ export function removeClickRecord(
 export function setSelectedEngine(engineId: string): void {
   const data = loadUserData();
   data.selectedEngineId = engineId;
-  saveUserData(data);
-}
-
-export function setSidebarCollapsed(collapsed: boolean): void {
-  const data = loadUserData();
-  data.sidebarCollapsed = collapsed;
   saveUserData(data);
 }

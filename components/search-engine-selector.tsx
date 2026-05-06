@@ -14,7 +14,7 @@ export function SearchEngineSelector() {
 
   return (
     <Select value={selectedEngineId} onValueChange={handleSetEngine}>
-      <SelectTrigger className="w-[140px]">
+      <SelectTrigger className="w-[140px]" aria-label="选择搜索引擎">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
