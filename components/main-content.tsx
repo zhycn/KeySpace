@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useApp } from "@/components/app-provider";
 import { FavoritesView } from "@/components/favorites-view";
 import { HomeView } from "@/components/home-view";
@@ -9,33 +8,17 @@ import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { SearchInput } from "@/components/search-input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import type { KeywordsFile } from "@/lib/types";
 
-export function MainContent() {
+interface MainContentProps {
+  keywordsMap: Record<string, string[]>;
+}
+
+export function MainContent({ keywordsMap }: MainContentProps) {
   const { viewMode, currentCategoryId, categories } = useApp();
-  const [keywordsData, setKeywordsData] = useState<Record<string, string[]>>(
-    {},
-  );
-
-  useEffect(() => {
-    async function loadKeywords() {
-      const data: Record<string, string[]> = {};
-      for (const cat of categories) {
-        try {
-          const mod = await import(`@/data/keywords/${cat.id}.json`);
-          data[cat.id] = (mod.default as KeywordsFile).keywords;
-        } catch {
-          data[cat.id] = [];
-        }
-      }
-      setKeywordsData(data);
-    }
-    loadKeywords();
-  }, [categories]);
 
   const currentCategory = categories.find((c) => c.id === currentCategoryId);
   const currentKeywords = currentCategoryId
-    ? (keywordsData[currentCategoryId] ?? [])
+    ? (keywordsMap[currentCategoryId] ?? [])
     : [];
 
   return (
