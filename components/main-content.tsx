@@ -6,6 +6,7 @@ import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
 import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { SearchInput } from "@/components/search-input";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -30,6 +31,7 @@ export function MainContent({ keywordsMap }: MainContentProps) {
           <SearchInput />
         </div>
         <SearchEngineSelector />
+        <ThemeToggle />
       </header>
       <main className="flex-1 overflow-auto p-6">
         {viewMode === "home" && <HomeView />}

@@ -26,7 +26,7 @@ export function KeywordGrid({ keywords, categoryId }: KeywordGridProps) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3">
       {filtered.map((kw) => (
         <KeywordTag key={kw} keyword={kw} categoryId={categoryId} />
       ))}

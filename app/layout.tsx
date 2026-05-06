@@ -21,7 +21,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full antialiased font-sans">
+    <html
+      lang="zh-CN"
+      className="h-full antialiased font-sans"
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('keyspace-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch{}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <AppProvider
           categories={categories}
