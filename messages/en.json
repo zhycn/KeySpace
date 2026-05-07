@@ -36,7 +36,6 @@
     "sortByCount": "By Clicks",
     "sortByRecent": "By Recent",
     "keywordCount": "{count} keywords",
-    "clickTimes": "{count} times",
     "browseCategory": "Browse {name} category"
   },
   "history": {
@@ -48,6 +47,7 @@
   },
   "keyword": {
     "searchLabel": "Search keyword: {keyword}",
+    "clickTimes": "{count} times",
     "none": "No keywords"
   },
   "sidebar": {
@@ -57,7 +57,9 @@
     "shortcutTitle": "Keyboard Shortcuts",
     "shortcutFocusSearch": "Focus search",
     "shortcutClearSearch": "Clear search",
-    "shortcutToggleSidebar": "Toggle sidebar"
+    "shortcutToggleSidebar": "Toggle sidebar",
+    "switchToEn": "English",
+    "switchToZh": "中文"
   },
   "error": {
     "loadFailed": "Page failed to load",

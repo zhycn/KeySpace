@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { KeywordTag } from "@/components/keyword-tag";
 
 interface KeywordGridProps {
@@ -8,10 +9,12 @@ interface KeywordGridProps {
 }
 
 export function KeywordGrid({ keywords, categoryId }: KeywordGridProps) {
+  const t = useTranslations("keyword");
+
   if (keywords.length === 0) {
     return (
       <div className="flex flex-col items-center gap-2 py-12">
-        <p className="text-muted-foreground">暂无关键词</p>
+        <p className="text-muted-foreground">{t("none")}</p>
       </div>
     );
   }

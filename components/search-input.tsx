@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { useSearch } from "@/components/search-provider";
@@ -16,6 +17,7 @@ export function SearchInput() {
   const { searchQuery, setSearchQuery } = useSearch();
   const hasQuery = searchQuery.length > 0;
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("search");
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -39,8 +41,8 @@ export function SearchInput() {
       </InputGroupAddon>
       <InputGroupInput
         ref={inputRef}
-        aria-label="搜索关键词"
-        placeholder="搜索关键词..."
+        aria-label={t("label")}
+        placeholder={t("placeholder")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
@@ -48,7 +50,7 @@ export function SearchInput() {
         {hasQuery ? (
           <InputGroupButton
             size="icon-xs"
-            aria-label="清除搜索"
+            aria-label={t("clear")}
             onClick={() => setSearchQuery("")}
           >
             <X />

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { GlobalSearchResults } from "@/components/global-search-results";
 import { HistoryView } from "@/components/history-view";
 import { HomeView } from "@/components/home-view";
@@ -15,6 +16,7 @@ export function MainContent() {
   const { viewMode, currentCategoryId } = useNavigation();
   const { categories, searchQuery } = useSearch();
   const keywordsMap = useKeywordsMap();
+  const t = useTranslations("search");
 
   const currentCategory = categories.find((c) => c.id === currentCategoryId);
   const currentKeywords = currentCategoryId
@@ -35,7 +37,7 @@ export function MainContent() {
       <main className="flex-1 overflow-auto p-4 md:p-6">
         {showGlobalSearch ? (
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold">搜索结果</h2>
+            <h2 className="text-lg font-semibold">{t("results")}</h2>
             <GlobalSearchResults />
           </div>
         ) : (

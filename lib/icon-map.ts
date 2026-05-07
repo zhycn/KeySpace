@@ -2,7 +2,6 @@ import {
   Award,
   BarChart3,
   FileText,
-  FolderOpen,
   MousePointerClick,
   Search,
   Share2,
@@ -21,9 +20,11 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Video,
 };
 
+const DEFAULT_ICON = Search;
+
 export function getIcon(
   name?: string,
 ): React.ComponentType<{ className?: string }> {
   if (name && iconMap[name]) return iconMap[name];
-  return FolderOpen;
+  return DEFAULT_ICON;
 }

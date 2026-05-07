@@ -1,11 +1,13 @@
 "use client";
 
-import { History, Home, Keyboard, Moon, Sun } from "lucide-react";
+import { History, Home, Keyboard, Languages, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { useNavigation } from "@/components/navigation-provider";
 import { useSearch } from "@/components/search-provider";
+import { useTheme } from "@/components/theme-provider";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Popover,
   PopoverContent,
@@ -23,25 +25,22 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useLocaleSwitch } from "@/i18n/locale-provider";
 import { getIcon } from "@/lib/icon-map";
 
 export function AppSidebar() {
-  const { setSearchQuery } = useSearch();
+  const { setSearchQuery, categories } = useSearch();
   const { setCurrentCategoryId } = useNavigation();
   const { theme, setTheme } = useTheme();
+  const { locale, setLocale } = useLocaleSwitch();
   const pathname = usePathname();
-
-  const categories = useSearch().categories;
-  const isHome =
-    pathname === "/" ||
-    pathname.endsWith("/home") ||
-    pathname.match(/^\/[a-z]{2}$/) !== null ||
-    pathname.match(/^\/[a-z]{2}\/$/) !== null;
-  const isHistory = pathname.endsWith("/history");
+  const t = useTranslations("nav");
+  const tSidebar = useTranslations("sidebar");
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const isHome = pathSegments.length === 0;
+  const isHistory = pathSegments[0] === "history";
   const currentCategoryId =
-    pathname.split("/").filter(Boolean).length >= 2 && !isHistory
-      ? (pathname.split("/").filter(Boolean).pop() ?? null)
-      : null;
+    !isHome && !isHistory ? (pathSegments[0] ?? null) : null;
 
   return (
     <Sidebar>
@@ -56,7 +55,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={isHome}>
                   <Link href="/" onClick={() => setSearchQuery("")}>
                     <Home />
-                    <span>首页</span>
+                    <span>{t("home")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -64,7 +63,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={isHistory}>
                   <Link href="/history" onClick={() => setSearchQuery("")}>
                     <History />
-                    <span>历史记录</span>
+                    <span>{t("history")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -72,7 +71,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>分类</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("categories")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {categories.map((cat) => {
@@ -107,8 +106,22 @@ export function AppSidebar() {
             >
               <Sun className="hidden dark:block" />
               <Moon className="block dark:hidden" />
-              <span className="dark:hidden">深色主题</span>
-              <span className="hidden dark:inline">浅色主题</span>
+              <span className="dark:hidden">{tSidebar("darkTheme")}</span>
+              <span className="hidden dark:inline">
+                {tSidebar("lightTheme")}
+              </span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => setLocale(locale === "zh" ? "en" : "zh")}
+            >
+              <Languages />
+              <span>
+                {locale === "zh"
+                  ? tSidebar("switchToEn")
+                  : tSidebar("switchToZh")}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -116,7 +129,7 @@ export function AppSidebar() {
               <PopoverTrigger asChild>
                 <SidebarMenuButton>
                   <Keyboard />
-                  <span>快捷键</span>
+                  <span>{tSidebar("shortcuts")}</span>
                 </SidebarMenuButton>
               </PopoverTrigger>
               <PopoverContent
@@ -124,24 +137,26 @@ export function AppSidebar() {
                 align="end"
                 className="w-56 p-3 gap-2"
               >
-                <div className="text-sm font-medium mb-1">键盘快捷键</div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">聚焦搜索</span>
-                  <kbd className="pointer-events-none inline-flex h-5.5 min-w-5.5 items-center justify-center rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground">
-                    ⌘K
-                  </kbd>
+                <div className="text-sm font-medium mb-1">
+                  {tSidebar("shortcutTitle")}
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">清除搜索</span>
-                  <kbd className="pointer-events-none inline-flex h-5.5 min-w-5.5 items-center justify-center rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground">
-                    Esc
-                  </kbd>
+                  <span className="text-muted-foreground">
+                    {tSidebar("shortcutFocusSearch")}
+                  </span>
+                  <Kbd>⌘K</Kbd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">切换侧边栏</span>
-                  <kbd className="pointer-events-none inline-flex h-5.5 min-w-5.5 items-center justify-center rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground">
-                    ⌘B
-                  </kbd>
+                  <span className="text-muted-foreground">
+                    {tSidebar("shortcutClearSearch")}
+                  </span>
+                  <Kbd>Esc</Kbd>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {tSidebar("shortcutToggleSidebar")}
+                  </span>
+                  <Kbd>⌘B</Kbd>
                 </div>
               </PopoverContent>
             </Popover>

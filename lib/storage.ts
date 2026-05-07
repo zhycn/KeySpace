@@ -8,31 +8,19 @@ const defaultData: UserStorage = {
   selectedEngineId: "google",
 };
 
-let cachedData: UserStorage | null = null;
-
 export function loadUserData(): UserStorage {
   if (typeof window === "undefined") return defaultData;
-  if (cachedData) return cachedData;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      const result: UserStorage = { ...defaultData };
-      cachedData = result;
-      return result;
-    }
-    const result: UserStorage = { ...defaultData, ...JSON.parse(raw) };
-    cachedData = result;
-    return result;
+    if (!raw) return { ...defaultData };
+    return { ...defaultData, ...JSON.parse(raw) };
   } catch {
-    const result: UserStorage = { ...defaultData };
-    cachedData = result;
-    return result;
+    return { ...defaultData };
   }
 }
 
 export function saveUserData(data: UserStorage): void {
   if (typeof window === "undefined") return;
-  cachedData = data;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 

@@ -6,39 +6,31 @@ import { SearchProvider } from "@/components/search-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import categoriesData from "@/data/categories.json";
-import configData from "@/data/config.json";
-import enginesData from "@/data/engines.json";
-import type { Category, KeywordsFile, SearchEngine } from "@/lib/types";
+import { categories, defaultEngineId, engines } from "@/lib/data-loader";
+import type { ViewMode } from "@/lib/types";
 
-const categories = categoriesData as Category[];
-const engines = enginesData as SearchEngine[];
-
-async function loadAllKeywords(): Promise<Record<string, string[]>> {
-  const entries = await Promise.all(
-    categories.map(async (cat) => {
-      try {
-        const mod = await import(`@/data/keywords/${cat.id}.json`);
-        return [cat.id, (mod.default as KeywordsFile).keywords] as const;
-      } catch {
-        return [cat.id, []] as const;
-      }
-    }),
-  );
-  return Object.fromEntries(entries);
+interface AppShellProps {
+  keywordsMap: Record<string, string[]>;
+  initialViewMode?: ViewMode;
+  initialCategoryId?: string;
 }
 
-export default async function Home() {
-  const keywordsMap = await loadAllKeywords();
-
+export function AppShell({
+  keywordsMap,
+  initialViewMode,
+  initialCategoryId,
+}: AppShellProps) {
   return (
     <KeywordsProvider keywordsMap={keywordsMap}>
       <SearchProvider
         categories={categories}
         engines={engines}
-        defaultEngineId={configData.defaultEngineId}
+        defaultEngineId={defaultEngineId}
       >
-        <NavigationProvider>
+        <NavigationProvider
+          initialViewMode={initialViewMode}
+          initialCategoryId={initialCategoryId}
+        >
           <TooltipProvider>
             <SidebarProvider>
               <AppSidebar />

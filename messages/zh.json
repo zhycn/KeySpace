@@ -36,7 +36,6 @@
     "sortByCount": "按点击数",
     "sortByRecent": "按最新",
     "keywordCount": "{count}个关键词",
-    "clickTimes": "{count}次",
     "browseCategory": "浏览{name}分类"
   },
   "history": {
@@ -48,6 +47,7 @@
   },
   "keyword": {
     "searchLabel": "搜索关键词: {keyword}",
+    "clickTimes": "{count}次",
     "none": "暂无关键词"
   },
   "sidebar": {
@@ -57,7 +57,9 @@
     "shortcutTitle": "键盘快捷键",
     "shortcutFocusSearch": "聚焦搜索",
     "shortcutClearSearch": "清除搜索",
-    "shortcutToggleSidebar": "切换侧边栏"
+    "shortcutToggleSidebar": "切换侧边栏",
+    "switchToEn": "English",
+    "switchToZh": "中文"
   },
   "error": {
     "loadFailed": "页面加载失败",

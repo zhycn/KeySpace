@@ -12,12 +12,10 @@ export interface KeywordsFile {
 export interface SearchEngine {
   id: string;
   name: string;
-  icon?: string;
   urlTemplate: string;
 }
 
 export interface ProjectConfig {
-  siteName: string;
   defaultEngineId: string;
 }
 

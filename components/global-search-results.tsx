@@ -1,10 +1,12 @@
 "use client";
 
 import Fuse from "fuse.js";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { KeywordTag } from "@/components/keyword-tag";
 import { useKeywordsMap } from "@/components/keywords-provider";
 import { useSearch } from "@/components/search-provider";
+import { groupByCategory } from "@/lib/click-utils";
 
 interface SearchItem {
   keyword: string;
@@ -15,6 +17,7 @@ interface SearchItem {
 export function GlobalSearchResults() {
   const { searchQuery, categories } = useSearch();
   const keywordsMap = useKeywordsMap();
+  const t = useTranslations("search");
 
   const fuseIndex = useMemo(() => {
     const allItems: SearchItem[] = [];
@@ -34,33 +37,13 @@ export function GlobalSearchResults() {
   const results = useMemo(() => {
     if (!searchQuery.trim()) return null;
     const matched = fuseIndex.search(searchQuery).map((r) => r.item);
-
-    const grouped: Record<
-      string,
-      { categoryName: string; items: { keyword: string; categoryId: string }[] }
-    > = {};
-    for (const item of matched) {
-      const group = grouped[item.categoryId];
-      if (!group) {
-        grouped[item.categoryId] = {
-          categoryName: item.categoryName,
-          items: [{ keyword: item.keyword, categoryId: item.categoryId }],
-        };
-      } else {
-        group.items.push({
-          keyword: item.keyword,
-          categoryId: item.categoryId,
-        });
-      }
-    }
-
-    return grouped;
-  }, [searchQuery, fuseIndex]);
+    return groupByCategory(matched, categories);
+  }, [searchQuery, fuseIndex, categories]);
 
   if (!results || Object.keys(results).length === 0) {
     return (
       <div className="flex flex-col items-center gap-2 py-12">
-        <p className="text-muted-foreground">没有匹配的关键词</p>
+        <p className="text-muted-foreground">{t("noMatch")}</p>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   createContext,
   useCallback,
@@ -56,6 +57,7 @@ export function SearchProvider({
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("search");
 
   useEffect(() => {
     const data = loadUserData();
@@ -75,16 +77,16 @@ export function SearchProvider({
       );
       const newWindow = window.open(url, "_blank");
       if (!newWindow) {
-        toast.error("弹窗被拦截", { description: "请允许浏览器弹窗后重试" });
+        toast.error(t("popupBlocked"), { description: t("popupBlockedDesc") });
       } else {
-        toast.success("已在新标签页打开搜索", {
+        toast.success(t("searchOpened"), {
           description: `${engine.name}: ${keyword}`,
         });
       }
       const updated = addClickRecord(keyword, categoryId);
       setClickHistory([...updated]);
     },
-    [engines, selectedEngineId],
+    [engines, selectedEngineId, t],
   );
 
   const handleSetEngine = useCallback((engineId: string) => {

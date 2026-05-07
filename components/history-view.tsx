@@ -1,47 +1,27 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { KeywordTag } from "@/components/keyword-tag";
 import { useSearch } from "@/components/search-provider";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { SortToggle } from "@/components/sort-toggle";
+import { groupByCategory, type SortMode, sortRecords } from "@/lib/click-utils";
 
 export function HistoryView() {
   const { clickHistory, categories } = useSearch();
-  const [sortMode, setSortMode] = useState<"count" | "recent">("count");
-
-  const sorted = useMemo(() => {
-    return [...clickHistory].sort((a, b) =>
-      sortMode === "count"
-        ? b.clickCount - a.clickCount
-        : b.clickedAt - a.clickedAt,
-    );
-  }, [clickHistory, sortMode]);
+  const [sortMode, setSortMode] = useState<SortMode>("count");
+  const t = useTranslations("history");
 
   const grouped = useMemo(() => {
-    const map: Record<string, { categoryName: string; items: typeof sorted }> =
-      {};
-    for (const record of sorted) {
-      const cat = categories.find((c) => c.id === record.categoryId);
-      const group = map[record.categoryId];
-      if (!group) {
-        map[record.categoryId] = {
-          categoryName: cat?.name ?? record.categoryId,
-          items: [record],
-        };
-      } else {
-        group.items.push(record);
-      }
-    }
-    return map;
-  }, [sorted, categories]);
+    const sorted = sortRecords(clickHistory, sortMode);
+    return groupByCategory(sorted, categories);
+  }, [clickHistory, sortMode, categories]);
 
   if (clickHistory.length === 0) {
     return (
       <div className="flex flex-col items-center gap-2 py-12">
-        <p className="text-muted-foreground">暂无点击记录</p>
-        <p className="text-sm text-muted-foreground">
-          点击关键词后会自动记录在这里
-        </p>
+        <p className="text-muted-foreground">{t("empty")}</p>
+        <p className="text-sm text-muted-foreground">{t("emptyDesc")}</p>
       </div>
     );
   }
@@ -49,19 +29,12 @@ export function HistoryView() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">历史记录</h2>
-        <ToggleGroup
-          type="single"
+        <h2 className="text-lg font-semibold">{t("title")}</h2>
+        <SortToggle
           value={sortMode}
-          onValueChange={(v) => {
-            if (v) setSortMode(v as "count" | "recent");
-          }}
-          variant="outline"
-          size="sm"
-        >
-          <ToggleGroupItem value="count">按点击数</ToggleGroupItem>
-          <ToggleGroupItem value="recent">按最近</ToggleGroupItem>
-        </ToggleGroup>
+          onChange={setSortMode}
+          namespace="history"
+        />
       </div>
       {Object.entries(grouped).map(([catId, group]) => (
         <div key={catId} className="flex flex-col gap-3">

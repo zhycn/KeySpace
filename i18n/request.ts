@@ -1,10 +1,13 @@
 import { getRequestConfig } from "next-intl/server";
-import { routing } from "./routing";
+import { SUPPORTED_LOCALES } from "@/lib/constants";
+
+const DEFAULT_LOCALE = "zh";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   let locale = await requestLocale;
-  if (!locale || !routing.locales.includes(locale as "zh" | "en")) {
-    locale = routing.defaultLocale;
+
+  if (!locale || !(SUPPORTED_LOCALES as readonly string[]).includes(locale)) {
+    locale = DEFAULT_LOCALE;
   }
 
   return {

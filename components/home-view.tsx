@@ -1,33 +1,20 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { KeywordTag } from "@/components/keyword-tag";
 import { useKeywordsMap } from "@/components/keywords-provider";
 import { useNavigation } from "@/components/navigation-provider";
 import { useSearch } from "@/components/search-provider";
+import { SortToggle } from "@/components/sort-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { getClicksByCategory, sortRecords } from "@/lib/click-utils";
 import { getIcon } from "@/lib/icon-map";
+import { seededShuffle } from "@/lib/seeded-shuffle";
 
 const MAX_CATEGORIES = 8;
 const MAX_KEYWORDS = 36;
-
-function seededShuffle<T>(arr: T[], seed: number): T[] {
-  const a = [...arr];
-  let s = seed;
-  for (let i = a.length - 1; i > 0; i--) {
-    s = (s * 16807 + 0) % 2147483647;
-    const j = s % (i + 1);
-    const tempI = a[i];
-    const tempJ = a[j];
-    if (tempI !== undefined && tempJ !== undefined) {
-      a[i] = tempJ;
-      a[j] = tempI;
-    }
-  }
-  return a;
-}
 
 interface RecommendedKeyword {
   keyword: string;
@@ -41,14 +28,15 @@ export function HomeView() {
   const { setViewMode, setCurrentCategoryId } = useNavigation();
   const keywordsMap = useKeywordsMap();
   const [sortMode, setSortMode] = useState<"count" | "recent">("count");
+  const t = useTranslations("home");
+  const tOnboarding = useTranslations("onboarding");
+
+  const clicksByCategory = useMemo(
+    () => getClicksByCategory(clickHistory),
+    [clickHistory],
+  );
 
   const recommendedCategories = useMemo(() => {
-    const clicksByCategory: Record<string, number> = {};
-    for (const r of clickHistory) {
-      clicksByCategory[r.categoryId] =
-        (clicksByCategory[r.categoryId] ?? 0) + r.clickCount;
-    }
-
     const sorted = [...categories].sort((a, b) => {
       const diff =
         (clicksByCategory[b.id] ?? 0) - (clicksByCategory[a.id] ?? 0);
@@ -68,29 +56,21 @@ export function HomeView() {
     }
 
     return result;
-  }, [categories, clickHistory]);
+  }, [categories, clicksByCategory]);
 
   const recommendedKeywords = useMemo(() => {
-    const clicksByCategory: Record<string, number> = {};
     const clickedSet = new Set(
       clickHistory.map((r) => `${r.categoryId}::${r.keyword}`),
     );
-
-    for (const r of clickHistory) {
-      clicksByCategory[r.categoryId] =
-        (clicksByCategory[r.categoryId] ?? 0) + r.clickCount;
-    }
 
     const preferredCategoryIds = Object.entries(clicksByCategory)
       .sort(([, a], [, b]) => b - a)
       .map(([id]) => id);
 
-    const hotKeywords: RecommendedKeyword[] = [...clickHistory]
-      .sort((a, b) =>
-        sortMode === "count"
-          ? b.clickCount - a.clickCount
-          : b.clickedAt - a.clickedAt,
-      )
+    const hotKeywords: RecommendedKeyword[] = sortRecords(
+      clickHistory,
+      sortMode,
+    )
       .slice(0, 15)
       .map((r) => ({
         keyword: r.keyword,
@@ -149,7 +129,7 @@ export function HomeView() {
     ];
 
     return merged.slice(0, MAX_KEYWORDS);
-  }, [clickHistory, sortMode, categories, keywordsMap]);
+  }, [clickHistory, sortMode, categories, keywordsMap, clicksByCategory]);
 
   const hasContent =
     recommendedCategories.length > 0 || recommendedKeywords.length > 0;
@@ -160,13 +140,15 @@ export function HomeView() {
     <div className="flex flex-col gap-8">
       {clickHistory.length === 0 && (
         <div className="rounded-lg border bg-muted/50 p-4 text-sm text-muted-foreground">
-          欢迎使用 KeySpace！选择一个分类，点击关键词即可在搜索引擎中搜索。
+          {tOnboarding("welcome")}
         </div>
       )}
       {recommendedCategories.length > 0 && (
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-semibold">
-            {clickHistory.length === 0 ? "浏览分类" : "推荐分类"}
+            {clickHistory.length === 0
+              ? t("browseCategories")
+              : t("recommendedCategories")}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {recommendedCategories.map((cat) => {
@@ -181,11 +163,13 @@ export function HomeView() {
                     setCurrentCategoryId(cat.id);
                     setViewMode("category");
                   }}
-                  aria-label={`浏览${cat.name}分类`}
+                  aria-label={t("browseCategory", { name: cat.name })}
                 >
                   <Icon className="size-6 text-muted-foreground" />
                   <span className="font-medium">{cat.name}</span>
-                  <Badge variant="secondary">{count}个关键词</Badge>
+                  <Badge variant="secondary">
+                    {t("keywordCount", { count })}
+                  </Badge>
                 </Button>
               );
             })}
@@ -196,20 +180,15 @@ export function HomeView() {
       {recommendedKeywords.length > 0 && (
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">推荐关键词</h2>
+            <h2 className="text-lg font-semibold">
+              {t("recommendedKeywords")}
+            </h2>
             {clickHistory.length > 0 && (
-              <ToggleGroup
-                type="single"
+              <SortToggle
                 value={sortMode}
-                onValueChange={(v) => {
-                  if (v) setSortMode(v as "count" | "recent");
-                }}
-                variant="outline"
-                size="sm"
-              >
-                <ToggleGroupItem value="count">按点击数</ToggleGroupItem>
-                <ToggleGroupItem value="recent">按最新</ToggleGroupItem>
-              </ToggleGroup>
+                onChange={setSortMode}
+                namespace="home"
+              />
             )}
           </div>
           <div className="flex flex-wrap gap-2">
