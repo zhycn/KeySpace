@@ -9,7 +9,6 @@ import {
   Search,
   Share2,
   ShoppingCart,
-  X,
   Video,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -225,34 +224,17 @@ export function HomeView() {
           </div>
           <div className="flex flex-wrap gap-2">
             {recommendedKeywords.map((item) => (
-              <div
+              <KeywordTag
                 key={`${item.keyword}-${item.categoryId}`}
-                className="group relative inline-flex items-center gap-1.5"
-              >
-                <KeywordTag
-                  keyword={item.keyword}
-                  categoryId={item.categoryId}
-                />
-                {item.isRecommended ? (
-                  <Badge variant="outline">推荐</Badge>
-                ) : (
-                  <Badge variant="secondary">{item.clickCount}次</Badge>
-                )}
-                {!item.isRecommended && (
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    aria-label="删除记录"
-                    className="absolute -top-1.5 -right-1.5 hidden group-hover:flex group-focus-within:flex size-4 rounded-full"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveClickRecord(item.keyword, item.categoryId);
-                    }}
-                  >
-                    <X />
-                  </Button>
-                )}
-              </div>
+                keyword={item.keyword}
+                categoryId={item.categoryId}
+                clickCount={item.isRecommended ? undefined : item.clickCount}
+                onDelete={
+                  item.isRecommended
+                    ? undefined
+                    : () => handleRemoveClickRecord(item.keyword, item.categoryId)
+                }
+              />
             ))}
           </div>
         </div>

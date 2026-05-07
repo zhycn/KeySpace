@@ -38,10 +38,15 @@ export function SearchInput() {
       <InputGroupInput
         ref={inputRef}
         aria-label="搜索关键词"
-        placeholder="搜索关键词... ⌘K"
+        placeholder="搜索关键词..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
+      {!hasQuery && (
+        <InputGroupAddon align="inline-end">
+          <kbd className="pointer-events-none text-xs text-muted-foreground">⌘K</kbd>
+        </InputGroupAddon>
+      )}
       {hasQuery && (
         <InputGroupAddon align="inline-end">
           <InputGroupButton
