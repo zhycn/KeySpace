@@ -24,14 +24,20 @@ export function useNavigation() {
   return ctx;
 }
 
-export function NavigationProvider({
-  children,
-}: {
+interface NavigationProviderProps {
+  initialViewMode?: ViewMode;
+  initialCategoryId?: string;
   children: React.ReactNode;
-}) {
-  const [viewMode, setViewMode] = useState<ViewMode>("home");
+}
+
+export function NavigationProvider({
+  initialViewMode = "home",
+  initialCategoryId,
+  children,
+}: NavigationProviderProps) {
+  const [viewMode, setViewMode] = useState<ViewMode>(initialViewMode);
   const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(
-    null,
+    initialCategoryId ?? null,
   );
 
   return (

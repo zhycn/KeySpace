@@ -1,14 +1,13 @@
 "use client";
 
 import { GlobalSearchResults } from "@/components/global-search-results";
+import { HistoryView } from "@/components/history-view";
 import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
 import { useKeywordsMap } from "@/components/keywords-provider";
 import { useNavigation } from "@/components/navigation-provider";
-import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { SearchInput } from "@/components/search-input";
 import { useSearch } from "@/components/search-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -26,16 +25,14 @@ export function MainContent() {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="flex h-14 items-center gap-4 px-4">
+      <header className="flex h-14 items-center gap-2 md:gap-4 px-2 md:px-4">
         <SidebarTrigger />
-        <div className="flex-1 max-w-md">
+        <div className="flex-1 md:max-w-md">
           <SearchInput />
         </div>
-        <SearchEngineSelector />
-        <ThemeToggle />
       </header>
       <Separator />
-      <main className="flex-1 overflow-auto p-6">
+      <main className="flex-1 overflow-auto p-4 md:p-6">
         {showGlobalSearch ? (
           <div className="flex flex-col gap-4">
             <h2 className="text-lg font-semibold">搜索结果</h2>
@@ -44,6 +41,7 @@ export function MainContent() {
         ) : (
           <>
             {viewMode === "home" && <HomeView />}
+            {viewMode === "history" && <HistoryView />}
             {viewMode === "category" && currentCategory && (
               <div className="flex flex-col gap-4">
                 <h2 className="text-lg font-semibold">

@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "title": "KeySpace",
+    "description": "Keyword navigation tool — quickly search marketing keywords with multi-engine support"
+  },
+  "nav": {
+    "home": "Home",
+    "history": "History",
+    "categories": "Categories"
+  },
+  "categories": {
+    "seo": "SEO Optimization",
+    "sem": "SEM Advertising",
+    "content-marketing": "Content Marketing",
+    "social-media-marketing": "Social Media Marketing",
+    "e-commerce": "E-Commerce",
+    "data-analytics": "Data Analytics",
+    "brand-marketing": "Brand Marketing",
+    "short-video": "Short Video Marketing"
+  },
+  "search": {
+    "placeholder": "Search keywords...",
+    "clear": "Clear search",
+    "label": "Search keywords",
+    "results": "Search Results",
+    "noMatch": "No matching keywords",
+    "currentEngine": "Search engine: {name}, click to switch",
+    "popupBlocked": "Popup Blocked",
+    "popupBlockedDesc": "Please allow popups and try again",
+    "searchOpened": "Search opened in new tab"
+  },
+  "home": {
+    "browseCategories": "Browse Categories",
+    "recommendedCategories": "Recommended Categories",
+    "recommendedKeywords": "Recommended Keywords",
+    "sortByCount": "By Clicks",
+    "sortByRecent": "By Recent",
+    "keywordCount": "{count} keywords",
+    "clickTimes": "{count} times",
+    "browseCategory": "Browse {name} category"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No click history yet",
+    "emptyDesc": "Clicked keywords will appear here automatically",
+    "sortByCount": "By Clicks",
+    "sortByRecent": "By Recent"
+  },
+  "keyword": {
+    "searchLabel": "Search keyword: {keyword}",
+    "none": "No keywords"
+  },
+  "sidebar": {
+    "darkTheme": "Dark Theme",
+    "lightTheme": "Light Theme",
+    "shortcuts": "Shortcuts",
+    "shortcutTitle": "Keyboard Shortcuts",
+    "shortcutFocusSearch": "Focus search",
+    "shortcutClearSearch": "Clear search",
+    "shortcutToggleSidebar": "Toggle sidebar"
+  },
+  "error": {
+    "loadFailed": "Page failed to load",
+    "unknownError": "An unknown error occurred",
+    "retry": "Retry"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been removed",
+    "backHome": "Back to Home"
+  },
+  "onboarding": {
+    "welcome": "Welcome to KeySpace! Select a category and click a keyword to search with your preferred engine."
+  }
+}

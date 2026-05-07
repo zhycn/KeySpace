@@ -158,9 +158,16 @@ export function HomeView() {
 
   return (
     <div className="flex flex-col gap-8">
+      {clickHistory.length === 0 && (
+        <div className="rounded-lg border bg-muted/50 p-4 text-sm text-muted-foreground">
+          欢迎使用 KeySpace！选择一个分类，点击关键词即可在搜索引擎中搜索。
+        </div>
+      )}
       {recommendedCategories.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h2 className="text-lg font-semibold">推荐分类</h2>
+          <h2 className="text-lg font-semibold">
+            {clickHistory.length === 0 ? "浏览分类" : "推荐分类"}
+          </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {recommendedCategories.map((cat) => {
               const count = keywordsMap[cat.id]?.length ?? 0;

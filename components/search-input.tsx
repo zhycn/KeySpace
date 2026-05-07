@@ -2,6 +2,7 @@
 
 import { Search, X } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { useSearch } from "@/components/search-provider";
 import {
   InputGroup,
@@ -33,6 +34,9 @@ export function SearchInput() {
 
   return (
     <InputGroup>
+      <InputGroupAddon align="inline-start">
+        <Search />
+      </InputGroupAddon>
       <InputGroupInput
         ref={inputRef}
         aria-label="搜索关键词"
@@ -40,9 +44,6 @@ export function SearchInput() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <InputGroupAddon align="inline-start">
-        <Search />
-      </InputGroupAddon>
       <InputGroupAddon align="inline-end">
         {hasQuery ? (
           <InputGroupButton
@@ -55,6 +56,7 @@ export function SearchInput() {
         ) : (
           <Kbd>⌘K</Kbd>
         )}
+        <SearchEngineSelector />
       </InputGroupAddon>
     </InputGroup>
   );

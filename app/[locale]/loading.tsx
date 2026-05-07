@@ -6,14 +6,12 @@ const keywordSkeletons = Array.from({ length: 12 }, (_, i) => `kw-${i}`);
 export default function Loading() {
   return (
     <div className="flex flex-col h-full">
-      <header className="flex h-14 items-center gap-4 px-4">
+      <header className="flex h-14 items-center gap-2 md:gap-4 px-2 md:px-4">
         <Skeleton className="size-8" />
-        <Skeleton className="h-9 flex-1 max-w-md" />
-        <Skeleton className="h-9 w-[140px]" />
-        <Skeleton className="size-9" />
+        <Skeleton className="h-9 flex-1 md:max-w-md" />
       </header>
       <div className="h-px bg-border" />
-      <main className="flex-1 overflow-auto p-6">
+      <main className="flex-1 overflow-auto p-4 md:p-6">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             <Skeleton className="h-7 w-32" />

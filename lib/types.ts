@@ -33,4 +33,4 @@ export interface UserStorage {
   selectedEngineId: string;
 }
 
-export type ViewMode = "home" | "category";
+export type ViewMode = "home" | "category" | "history";

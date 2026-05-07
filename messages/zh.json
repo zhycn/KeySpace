@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "title": "KeySpace",
+    "description": "关键词导航工具 — 快速搜索营销关键词，支持多搜索引擎切换"
+  },
+  "nav": {
+    "home": "首页",
+    "history": "历史记录",
+    "categories": "分类"
+  },
+  "categories": {
+    "seo": "SEO优化",
+    "sem": "SEM推广",
+    "content-marketing": "内容营销",
+    "social-media-marketing": "社交媒体营销",
+    "e-commerce": "电商运营",
+    "data-analytics": "数据分析",
+    "brand-marketing": "品牌营销",
+    "short-video": "短视频营销"
+  },
+  "search": {
+    "placeholder": "搜索关键词...",
+    "clear": "清除搜索",
+    "label": "搜索关键词",
+    "results": "搜索结果",
+    "noMatch": "没有匹配的关键词",
+    "currentEngine": "当前搜索引擎: {name}，点击切换",
+    "popupBlocked": "弹窗被拦截",
+    "popupBlockedDesc": "请允许浏览器弹窗后重试",
+    "searchOpened": "已在新标签页打开搜索"
+  },
+  "home": {
+    "browseCategories": "浏览分类",
+    "recommendedCategories": "推荐分类",
+    "recommendedKeywords": "推荐关键词",
+    "sortByCount": "按点击数",
+    "sortByRecent": "按最新",
+    "keywordCount": "{count}个关键词",
+    "clickTimes": "{count}次",
+    "browseCategory": "浏览{name}分类"
+  },
+  "history": {
+    "title": "历史记录",
+    "empty": "暂无点击记录",
+    "emptyDesc": "点击关键词后会自动记录在这里",
+    "sortByCount": "按点击数",
+    "sortByRecent": "按最近"
+  },
+  "keyword": {
+    "searchLabel": "搜索关键词: {keyword}",
+    "none": "暂无关键词"
+  },
+  "sidebar": {
+    "darkTheme": "深色主题",
+    "lightTheme": "浅色主题",
+    "shortcuts": "快捷键",
+    "shortcutTitle": "键盘快捷键",
+    "shortcutFocusSearch": "聚焦搜索",
+    "shortcutClearSearch": "清除搜索",
+    "shortcutToggleSidebar": "切换侧边栏"
+  },
+  "error": {
+    "loadFailed": "页面加载失败",
+    "unknownError": "发生了未知错误",
+    "retry": "重试"
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "你访问的页面不存在或已被移除",
+    "backHome": "返回首页"
+  },
+  "onboarding": {
+    "welcome": "欢迎使用 KeySpace！选择一个分类，点击关键词即可在搜索引擎中搜索。"
+  }
+}
