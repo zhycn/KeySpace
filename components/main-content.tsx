@@ -6,8 +6,8 @@ import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
 import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { SearchInput } from "@/components/search-input";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface MainContentProps {
@@ -28,7 +28,6 @@ export function MainContent({ keywordsMap }: MainContentProps) {
     <div className="flex flex-col h-full">
       <header className="flex h-14 items-center gap-4 px-4">
         <SidebarTrigger />
-        <Separator orientation="vertical" className="h-6" />
         <div className="flex-1 max-w-md">
           <SearchInput />
         </div>
