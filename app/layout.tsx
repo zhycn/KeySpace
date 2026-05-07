@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/components/app-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import categoriesData from "@/data/categories.json";
 import configData from "@/data/config.json";
 import enginesData from "@/data/engines.json";
@@ -40,6 +41,7 @@ export default function RootLayout({
           defaultEngineId={configData.defaultEngineId}
         >
           <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
         </AppProvider>
       </body>
     </html>
