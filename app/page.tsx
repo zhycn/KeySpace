@@ -1,10 +1,16 @@
+import { AppProvider } from "@/components/app-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { MainContent } from "@/components/main-content";
+import { Toaster } from "@/components/ui/sonner";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import categoriesData from "@/data/categories.json";
-import type { Category, KeywordsFile } from "@/lib/types";
+import configData from "@/data/config.json";
+import enginesData from "@/data/engines.json";
+import type { Category, KeywordsFile, SearchEngine } from "@/lib/types";
 
 const categories = categoriesData as Category[];
+const engines = enginesData as SearchEngine[];
 
 async function loadAllKeywords(): Promise<Record<string, string[]>> {
   const entries = await Promise.all(
@@ -24,11 +30,21 @@ export default async function Home() {
   const keywordsMap = await loadAllKeywords();
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <MainContent keywordsMap={keywordsMap} />
-      </SidebarInset>
-    </SidebarProvider>
+    <AppProvider
+      categories={categories}
+      engines={engines}
+      defaultEngineId={configData.defaultEngineId}
+      keywordsMap={keywordsMap}
+    >
+      <TooltipProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <MainContent keywordsMap={keywordsMap} />
+          </SidebarInset>
+        </SidebarProvider>
+        <Toaster />
+      </TooltipProvider>
+    </AppProvider>
   );
 }

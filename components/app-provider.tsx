@@ -32,6 +32,7 @@ interface AppState {
   favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
+  keywordsMap: Record<string, string[]>;
 }
 
 interface AppActions {
@@ -59,6 +60,7 @@ interface AppProviderProps {
   categories: Category[];
   engines: SearchEngine[];
   defaultEngineId: string;
+  keywordsMap: Record<string, string[]>;
   children: React.ReactNode;
 }
 
@@ -66,6 +68,7 @@ export function AppProvider({
   categories,
   engines,
   defaultEngineId,
+  keywordsMap,
   children,
 }: AppProviderProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("home");
@@ -78,6 +81,7 @@ export function AppProvider({
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
   const [mounted, setMounted] = useState(false);
+  const [keywordsMapState] = useState<Record<string, string[]>>(keywordsMap);
 
   useEffect(() => {
     const data = loadUserData();
@@ -149,6 +153,7 @@ export function AppProvider({
         favorites,
         clickHistory,
         selectedEngineId,
+        keywordsMap: keywordsMapState,
         setViewMode,
         setCurrentCategoryId,
         setSearchQuery,

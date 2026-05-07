@@ -2,6 +2,7 @@
 
 import { useApp } from "@/components/app-provider";
 import { FavoritesView } from "@/components/favorites-view";
+import { GlobalSearchResults } from "@/components/global-search-results";
 import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
 import { SearchEngineSelector } from "@/components/search-engine-selector";
@@ -15,12 +16,14 @@ interface MainContentProps {
 }
 
 export function MainContent({ keywordsMap }: MainContentProps) {
-  const { viewMode, currentCategoryId, categories } = useApp();
+  const { viewMode, currentCategoryId, categories, searchQuery } = useApp();
 
   const currentCategory = categories.find((c) => c.id === currentCategoryId);
   const currentKeywords = currentCategoryId
     ? (keywordsMap[currentCategoryId] ?? [])
     : [];
+
+  const showGlobalSearch = searchQuery.trim() && viewMode !== "favorites";
 
   return (
     <div className="flex flex-col h-full">
@@ -35,16 +38,25 @@ export function MainContent({ keywordsMap }: MainContentProps) {
       </header>
       <Separator />
       <main className="flex-1 overflow-auto p-6">
-        {viewMode === "home" && <HomeView />}
-        {viewMode === "favorites" && <FavoritesView />}
-        {viewMode === "category" && currentCategory && (
+        {showGlobalSearch ? (
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold">{currentCategory.name}</h2>
-            <KeywordGrid
-              keywords={currentKeywords}
-              categoryId={currentCategory.id}
-            />
+            <h2 className="text-lg font-semibold">搜索结果</h2>
+            <GlobalSearchResults />
           </div>
+        ) : (
+          <>
+            {viewMode === "home" && <HomeView />}
+            {viewMode === "favorites" && <FavoritesView />}
+            {viewMode === "category" && currentCategory && (
+              <div className="flex flex-col gap-4">
+                <h2 className="text-lg font-semibold">{currentCategory.name}</h2>
+                <KeywordGrid
+                  keywords={currentKeywords}
+                  categoryId={currentCategory.id}
+                />
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
