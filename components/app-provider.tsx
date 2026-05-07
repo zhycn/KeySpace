@@ -10,7 +10,6 @@ import {
 import {
   addClickRecord,
   loadUserData,
-  removeClickRecord,
   setSelectedEngine,
 } from "@/lib/storage";
 import { toast } from "sonner";
@@ -37,7 +36,6 @@ interface AppActions {
   setCurrentCategoryId: (id: string | null) => void;
   setSearchQuery: (q: string) => void;
   handleKeywordClick: (keyword: string, categoryId: string) => void;
-  handleRemoveClickRecord: (keyword: string, categoryId: string) => void;
   handleSetEngine: (engineId: string) => void;
 }
 
@@ -106,14 +104,6 @@ export function AppProvider({
     [engines, selectedEngineId],
   );
 
-  const handleRemoveClickRecord = useCallback(
-    (keyword: string, categoryId: string) => {
-      const updated = removeClickRecord(keyword, categoryId);
-      setClickHistory([...updated]);
-    },
-    [],
-  );
-
   const handleSetEngine = useCallback((engineId: string) => {
     setSelectedEngine(engineId);
     setSelectedEngineIdState(engineId);
@@ -134,7 +124,6 @@ export function AppProvider({
         setCurrentCategoryId,
         setSearchQuery,
         handleKeywordClick,
-        handleRemoveClickRecord,
         handleSetEngine,
       }}
     >

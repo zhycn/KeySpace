@@ -51,7 +51,6 @@ interface RecommendedKeyword {
 export function HomeView() {
   const {
     clickHistory,
-    handleRemoveClickRecord,
     categories,
     keywordsMap,
     setViewMode,
@@ -229,11 +228,6 @@ export function HomeView() {
                 keyword={item.keyword}
                 categoryId={item.categoryId}
                 clickCount={item.isRecommended ? undefined : item.clickCount}
-                onDelete={
-                  item.isRecommended
-                    ? undefined
-                    : () => handleRemoveClickRecord(item.keyword, item.categoryId)
-                }
               />
             ))}
           </div>

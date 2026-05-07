@@ -46,18 +46,6 @@ export function addClickRecord(
   return data.clickHistory;
 }
 
-export function removeClickRecord(
-  keyword: string,
-  categoryId: string,
-): ClickRecord[] {
-  const data = loadUserData();
-  data.clickHistory = data.clickHistory.filter(
-    (r) => !(r.keyword === keyword && r.categoryId === categoryId),
-  );
-  saveUserData(data);
-  return data.clickHistory;
-}
-
 export function setSelectedEngine(engineId: string): void {
   const data = loadUserData();
   data.selectedEngineId = engineId;
