@@ -1,18 +1,8 @@
 "use client";
 
-import {
-  Award,
-  BarChart3,
-  FileText,
-  FolderOpen,
-  Home,
-  MousePointerClick,
-  Search,
-  Share2,
-  ShoppingCart,
-  Video,
-} from "lucide-react";
-import { useApp } from "@/components/app-provider";
+import { Home } from "lucide-react";
+import { useNavigation } from "@/components/navigation-provider";
+import { useSearch } from "@/components/search-provider";
 import {
   Sidebar,
   SidebarContent,
@@ -24,32 +14,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Search,
-  MousePointerClick,
-  FileText,
-  Share2,
-  ShoppingCart,
-  BarChart3,
-  Award,
-  Video,
-};
+import { getIcon } from "@/lib/icon-map";
 
 export function AppSidebar() {
-  const {
-    categories,
-    viewMode,
-    currentCategoryId,
-    setViewMode,
-    setCurrentCategoryId,
-    setSearchQuery,
-  } = useApp();
+  const { categories, setSearchQuery } = useSearch();
+  const { viewMode, currentCategoryId, setViewMode, setCurrentCategoryId } =
+    useNavigation();
 
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <h1 className="text-xl font-bold">KeySpace</h1>
+        <div className="text-xl font-bold">KeySpace</div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -75,7 +50,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {categories.map((cat) => {
-                const Icon = cat.icon && iconMap[cat.icon] ? iconMap[cat.icon] : FolderOpen;
+                const Icon = getIcon(cat.icon);
                 return (
                   <SidebarMenuItem key={cat.id}>
                     <SidebarMenuButton

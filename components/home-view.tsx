@@ -1,42 +1,30 @@
 "use client";
 
-import {
-  Award,
-  BarChart3,
-  FileText,
-  FolderOpen,
-  MousePointerClick,
-  Search,
-  Share2,
-  ShoppingCart,
-  Video,
-} from "lucide-react";
 import { useMemo, useState } from "react";
-import { useApp } from "@/components/app-provider";
 import { KeywordTag } from "@/components/keyword-tag";
+import { useKeywordsMap } from "@/components/keywords-provider";
+import { useNavigation } from "@/components/navigation-provider";
+import { useSearch } from "@/components/search-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Search,
-  MousePointerClick,
-  FileText,
-  Share2,
-  ShoppingCart,
-  BarChart3,
-  Award,
-  Video,
-};
+import { getIcon } from "@/lib/icon-map";
 
 const MAX_CATEGORIES = 8;
 const MAX_KEYWORDS = 36;
 
-function shuffle<T>(arr: T[]): T[] {
+function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
+  let s = seed;
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    s = (s * 16807 + 0) % 2147483647;
+    const j = s % (i + 1);
+    const tempI = a[i];
+    const tempJ = a[j];
+    if (tempI !== undefined && tempJ !== undefined) {
+      a[i] = tempJ;
+      a[j] = tempI;
+    }
   }
   return a;
 }
@@ -49,13 +37,9 @@ interface RecommendedKeyword {
 }
 
 export function HomeView() {
-  const {
-    clickHistory,
-    categories,
-    keywordsMap,
-    setViewMode,
-    setCurrentCategoryId,
-  } = useApp();
+  const { clickHistory, categories } = useSearch();
+  const { setViewMode, setCurrentCategoryId } = useNavigation();
+  const keywordsMap = useKeywordsMap();
   const [sortMode, setSortMode] = useState<"count" | "recent">("count");
 
   const recommendedCategories = useMemo(() => {
@@ -66,7 +50,8 @@ export function HomeView() {
     }
 
     const sorted = [...categories].sort((a, b) => {
-      const diff = (clicksByCategory[b.id] ?? 0) - (clicksByCategory[a.id] ?? 0);
+      const diff =
+        (clicksByCategory[b.id] ?? 0) - (clicksByCategory[a.id] ?? 0);
       if (diff !== 0) return diff;
       return a.name.localeCompare(b.name, "zh-CN");
     });
@@ -74,12 +59,12 @@ export function HomeView() {
     if (sorted.length <= MAX_CATEGORIES) return sorted;
 
     const preferred = sorted.filter((c) => (clicksByCategory[c.id] ?? 0) > 0);
-    const remaining = sorted.filter((c) => !(clicksByCategory[c.id] > 0));
+    const remaining = sorted.filter((c) => (clicksByCategory[c.id] ?? 0) === 0);
 
     const result = preferred.slice(0, MAX_CATEGORIES);
     const need = MAX_CATEGORIES - result.length;
     if (need > 0) {
-      result.push(...shuffle(remaining).slice(0, need));
+      result.push(...seededShuffle(remaining, 42).slice(0, need));
     }
 
     return result;
@@ -115,17 +100,16 @@ export function HomeView() {
       }));
 
     const discoveryKeywords: RecommendedKeyword[] = [];
-    const categoryOrder = preferredCategoryIds.length > 0
-      ? preferredCategoryIds
-      : categories.map((c) => c.id);
+    const categoryOrder =
+      preferredCategoryIds.length > 0
+        ? preferredCategoryIds
+        : categories.map((c) => c.id);
 
     for (const catId of categoryOrder) {
       const kws = keywordsMap[catId] ?? [];
-      const unclicked = kws.filter(
-        (kw) => !clickedSet.has(`${catId}::${kw}`),
-      );
+      const unclicked = kws.filter((kw) => !clickedSet.has(`${catId}::${kw}`));
       discoveryKeywords.push(
-        ...shuffle(unclicked)
+        ...seededShuffle(unclicked, clickHistory.length + catId.length)
           .slice(0, 5)
           .map((kw) => ({
             keyword: kw,
@@ -145,7 +129,7 @@ export function HomeView() {
           (kw) => !clickedSet.has(`${catId}::${kw}`),
         );
         discoveryKeywords.push(
-          ...shuffle(unclicked)
+          ...seededShuffle(unclicked, clickHistory.length + catId.length * 2)
             .slice(0, 3)
             .map((kw) => ({
               keyword: kw,
@@ -158,7 +142,7 @@ export function HomeView() {
 
     const merged = [
       ...hotKeywords,
-      ...shuffle(discoveryKeywords).slice(
+      ...seededShuffle(discoveryKeywords, 7).slice(
         0,
         MAX_KEYWORDS - hotKeywords.length,
       ),
@@ -180,8 +164,7 @@ export function HomeView() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {recommendedCategories.map((cat) => {
               const count = keywordsMap[cat.id]?.length ?? 0;
-              const Icon =
-                cat.icon && iconMap[cat.icon] ? iconMap[cat.icon] : FolderOpen;
+              const Icon = getIcon(cat.icon);
               return (
                 <Button
                   key={cat.id}
@@ -191,6 +174,7 @@ export function HomeView() {
                     setCurrentCategoryId(cat.id);
                     setViewMode("category");
                   }}
+                  aria-label={`浏览${cat.name}分类`}
                 >
                   <Icon className="size-6 text-muted-foreground" />
                   <span className="font-medium">{cat.name}</span>

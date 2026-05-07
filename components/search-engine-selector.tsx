@@ -1,6 +1,6 @@
 "use client";
 
-import { useApp } from "@/components/app-provider";
+import { useSearch } from "@/components/search-provider";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 
 export function SearchEngineSelector() {
-  const { engines, selectedEngineId, handleSetEngine } = useApp();
+  const { engines, selectedEngineId, handleSetEngine } = useSearch();
 
   return (
     <Select value={selectedEngineId} onValueChange={handleSetEngine}>

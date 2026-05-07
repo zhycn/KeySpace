@@ -1,21 +1,21 @@
 "use client";
 
-import { useApp } from "@/components/app-provider";
 import { GlobalSearchResults } from "@/components/global-search-results";
 import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
+import { useKeywordsMap } from "@/components/keywords-provider";
+import { useNavigation } from "@/components/navigation-provider";
 import { SearchEngineSelector } from "@/components/search-engine-selector";
 import { SearchInput } from "@/components/search-input";
-import { Separator } from "@/components/ui/separator";
+import { useSearch } from "@/components/search-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
-interface MainContentProps {
-  keywordsMap: Record<string, string[]>;
-}
-
-export function MainContent({ keywordsMap }: MainContentProps) {
-  const { viewMode, currentCategoryId, categories, searchQuery } = useApp();
+export function MainContent() {
+  const { viewMode, currentCategoryId } = useNavigation();
+  const { categories, searchQuery } = useSearch();
+  const keywordsMap = useKeywordsMap();
 
   const currentCategory = categories.find((c) => c.id === currentCategoryId);
   const currentKeywords = currentCategoryId
@@ -46,7 +46,9 @@ export function MainContent({ keywordsMap }: MainContentProps) {
             {viewMode === "home" && <HomeView />}
             {viewMode === "category" && currentCategory && (
               <div className="flex flex-col gap-4">
-                <h2 className="text-lg font-semibold">{currentCategory.name}</h2>
+                <h2 className="text-lg font-semibold">
+                  {currentCategory.name}
+                </h2>
                 <KeywordGrid
                   keywords={currentKeywords}
                   categoryId={currentCategory.id}

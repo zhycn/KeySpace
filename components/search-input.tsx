@@ -2,7 +2,7 @@
 
 import { Search, X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { useApp } from "@/components/app-provider";
+import { useSearch } from "@/components/search-provider";
 import {
   InputGroup,
   InputGroupAddon,
@@ -12,7 +12,7 @@ import {
 import { Kbd } from "@/components/ui/kbd";
 
 export function SearchInput() {
-  const { searchQuery, setSearchQuery } = useApp();
+  const { searchQuery, setSearchQuery } = useSearch();
   const hasQuery = searchQuery.length > 0;
   const inputRef = useRef<HTMLInputElement>(null);
 
