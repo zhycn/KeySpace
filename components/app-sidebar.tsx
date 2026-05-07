@@ -1,6 +1,18 @@
 "use client";
 
-import { FolderOpen, Home, Star } from "lucide-react";
+import {
+  Award,
+  BarChart3,
+  FileText,
+  FolderOpen,
+  Home,
+  MousePointerClick,
+  Search,
+  Share2,
+  ShoppingCart,
+  Star,
+  Video,
+} from "lucide-react";
 import { useApp } from "@/components/app-provider";
 import {
   Sidebar,
@@ -13,6 +25,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Search,
+  MousePointerClick,
+  FileText,
+  Share2,
+  ShoppingCart,
+  BarChart3,
+  Award,
+  Video,
+};
 
 export function AppSidebar() {
   const {
@@ -64,23 +87,26 @@ export function AppSidebar() {
           <SidebarGroupLabel>分类</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {categories.map((cat) => (
-                <SidebarMenuItem key={cat.id}>
-                  <SidebarMenuButton
-                    isActive={
-                      viewMode === "category" && currentCategoryId === cat.id
-                    }
-                    onClick={() => {
-                      setCurrentCategoryId(cat.id);
-                      setViewMode("category");
-                      setSearchQuery("");
-                    }}
-                  >
-                    <FolderOpen />
-                    <span>{cat.name}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {categories.map((cat) => {
+                const Icon = cat.icon && iconMap[cat.icon] ? iconMap[cat.icon] : FolderOpen;
+                return (
+                  <SidebarMenuItem key={cat.id}>
+                    <SidebarMenuButton
+                      isActive={
+                        viewMode === "category" && currentCategoryId === cat.id
+                      }
+                      onClick={() => {
+                        setCurrentCategoryId(cat.id);
+                        setViewMode("category");
+                        setSearchQuery("");
+                      }}
+                    >
+                      <Icon />
+                      <span>{cat.name}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -1,5 +1,10 @@
 [
-  { "id": "seo", "name": "SEO优化" },
-  { "id": "sem", "name": "SEM推广" },
-  { "id": "content-marketing", "name": "内容营销" }
+  { "id": "seo", "name": "SEO优化", "icon": "Search" },
+  { "id": "sem", "name": "SEM推广", "icon": "MousePointerClick" },
+  { "id": "content-marketing", "name": "内容营销", "icon": "FileText" },
+  { "id": "social-media-marketing", "name": "社交媒体营销", "icon": "Share2" },
+  { "id": "e-commerce", "name": "电商运营", "icon": "ShoppingCart" },
+  { "id": "data-analytics", "name": "数据分析", "icon": "BarChart3" },
+  { "id": "brand-marketing", "name": "品牌营销", "icon": "Award" },
+  { "id": "short-video", "name": "短视频营销", "icon": "Video" }
 ]
