@@ -9,6 +9,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Kbd } from "@/components/ui/kbd";
 
 export function SearchInput() {
   const { searchQuery, setSearchQuery } = useApp();
@@ -32,9 +33,6 @@ export function SearchInput() {
 
   return (
     <InputGroup>
-      <InputGroupAddon align="inline-start">
-        <Search />
-      </InputGroupAddon>
       <InputGroupInput
         ref={inputRef}
         aria-label="搜索关键词"
@@ -42,13 +40,11 @@ export function SearchInput() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      {!hasQuery && (
-        <InputGroupAddon align="inline-end">
-          <kbd className="pointer-events-none text-xs text-muted-foreground">⌘K</kbd>
-        </InputGroupAddon>
-      )}
-      {hasQuery && (
-        <InputGroupAddon align="inline-end">
+      <InputGroupAddon align="inline-start">
+        <Search />
+      </InputGroupAddon>
+      <InputGroupAddon align="inline-end">
+        {hasQuery ? (
           <InputGroupButton
             size="icon-xs"
             aria-label="清除搜索"
@@ -56,8 +52,10 @@ export function SearchInput() {
           >
             <X />
           </InputGroupButton>
-        </InputGroupAddon>
-      )}
+        ) : (
+          <Kbd>⌘K</Kbd>
+        )}
+      </InputGroupAddon>
     </InputGroup>
   );
 }
