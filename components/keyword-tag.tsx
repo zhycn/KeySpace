@@ -18,7 +18,7 @@ export function KeywordTag({ keyword, categoryId }: KeywordTagProps) {
     <div className="inline-flex items-center -space-x-px">
       <Button
         variant="outline"
-        className="h-8 rounded-r-none pr-2"
+        className="h-8 rounded-r-none pr-2 active:scale-95 transition-transform"
         onClick={() => handleKeywordClick(keyword, categoryId)}
       >
         {keyword}

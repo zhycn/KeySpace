@@ -14,6 +14,7 @@ import {
   setSelectedEngine,
   toggleFavorite,
 } from "@/lib/storage";
+import { toast } from "sonner";
 import type {
   Category,
   ClickRecord,
@@ -94,7 +95,14 @@ export function AppProvider({
         "{keyword}",
         encodeURIComponent(keyword),
       );
-      window.open(url, "_blank");
+      const newWindow = window.open(url, "_blank");
+      if (!newWindow) {
+        toast.error("弹窗被拦截", { description: "请允许浏览器弹窗后重试" });
+      } else {
+        toast.success("已在新标签页打开搜索", {
+          description: `${engine.name}: ${keyword}`,
+        });
+      }
       const updated = addClickRecord(keyword, categoryId);
       setClickHistory([...updated]);
     },
