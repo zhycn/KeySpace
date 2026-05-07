@@ -30,8 +30,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Video,
 };
 
-const MAX_CATEGORIES = 6;
-const MAX_KEYWORDS = 25;
+const MAX_CATEGORIES = 8;
+const MAX_KEYWORDS = 36;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
