@@ -1,32 +1,21 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("keyspace-theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const isDark = stored === "dark" || (!stored && prefersDark);
-    setDark(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-  }, []);
-
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("keyspace-theme", next ? "dark" : "light");
-  };
+  const { theme, setTheme } = useTheme();
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggle} aria-label="切换主题">
-      {dark ? <Sun /> : <Moon />}
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="切换主题"
+    >
+      <Sun className="hidden dark:block" />
+      <Moon className="block dark:hidden" />
     </Button>
   );
 }

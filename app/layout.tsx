@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import configData from "@/data/config.json";
 
 export const metadata: Metadata = {
-  title: configData.siteName,
-  description: "关键词导航工具",
+  title: {
+    default: configData.siteName,
+    template: `%s | ${configData.siteName}`,
+  },
+  description: "关键词导航工具 — 快速搜索营销关键词，支持多搜索引擎切换",
+  icons: { icon: "/favicon.ico" },
+  openGraph: {
+    title: configData.siteName,
+    description: "关键词导航工具 — 快速搜索营销关键词，支持多搜索引擎切换",
+    type: "website",
+    locale: "zh_CN",
+  },
 };
 
 export default function RootLayout({
@@ -18,14 +29,11 @@ export default function RootLayout({
       className="h-full antialiased font-sans"
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('keyspace-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch{}})()`,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

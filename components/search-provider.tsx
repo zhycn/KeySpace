@@ -7,73 +7,55 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  addClickRecord,
-  loadUserData,
-  setSelectedEngine,
-} from "@/lib/storage";
 import { toast } from "sonner";
-import type {
-  Category,
-  ClickRecord,
-  SearchEngine,
-  ViewMode,
-} from "@/lib/types";
+import { addClickRecord, loadUserData, setSelectedEngine } from "@/lib/storage";
+import type { Category, ClickRecord, SearchEngine } from "@/lib/types";
 
-interface AppState {
-  viewMode: ViewMode;
-  currentCategoryId: string | null;
+interface SearchState {
   searchQuery: string;
-  categories: Category[];
-  engines: SearchEngine[];
-  clickHistory: ClickRecord[];
   selectedEngineId: string;
-  keywordsMap: Record<string, string[]>;
+  clickHistory: ClickRecord[];
 }
 
-interface AppActions {
-  setViewMode: (mode: ViewMode) => void;
-  setCurrentCategoryId: (id: string | null) => void;
+interface SearchActions {
   setSearchQuery: (q: string) => void;
   handleKeywordClick: (keyword: string, categoryId: string) => void;
   handleSetEngine: (engineId: string) => void;
 }
 
-type AppContextType = AppState & AppActions;
+interface SearchStaticData {
+  categories: Category[];
+  engines: SearchEngine[];
+}
 
-const AppContext = createContext<AppContextType | null>(null);
+type SearchContextType = SearchState & SearchActions & SearchStaticData;
 
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error("useApp must be used within AppProvider");
+const SearchContext = createContext<SearchContextType | null>(null);
+
+export function useSearch() {
+  const ctx = useContext(SearchContext);
+  if (!ctx) throw new Error("useSearch must be used within SearchProvider");
   return ctx;
 }
 
-interface AppProviderProps {
+interface SearchProviderProps {
   categories: Category[];
   engines: SearchEngine[];
   defaultEngineId: string;
-  keywordsMap: Record<string, string[]>;
   children: React.ReactNode;
 }
 
-export function AppProvider({
+export function SearchProvider({
   categories,
   engines,
   defaultEngineId,
-  keywordsMap,
   children,
-}: AppProviderProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("home");
-  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(
-    null,
-  );
+}: SearchProviderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [clickHistory, setClickHistory] = useState<ClickRecord[]>([]);
   const [selectedEngineId, setSelectedEngineIdState] =
     useState(defaultEngineId);
   const [mounted, setMounted] = useState(false);
-  const [keywordsMapState] = useState<Record<string, string[]>>(keywordsMap);
 
   useEffect(() => {
     const data = loadUserData();
@@ -86,6 +68,7 @@ export function AppProvider({
     (keyword: string, categoryId: string) => {
       const engine =
         engines.find((e) => e.id === selectedEngineId) || engines[0];
+      if (!engine) return;
       const url = engine.urlTemplate.replace(
         "{keyword}",
         encodeURIComponent(keyword),
@@ -109,25 +92,24 @@ export function AppProvider({
     setSelectedEngineIdState(engineId);
   }, []);
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <AppContext.Provider
+    <SearchContext.Provider
       value={{
-        viewMode,
-        currentCategoryId,
         searchQuery,
+        selectedEngineId,
+        clickHistory,
         categories,
         engines,
-        clickHistory,
-        selectedEngineId,
-        keywordsMap: keywordsMapState,
-        setViewMode,
-        setCurrentCategoryId,
         setSearchQuery,
         handleKeywordClick,
         handleSetEngine,
       }}
     >
-      {mounted ? children : null}
-    </AppContext.Provider>
+      {children}
+    </SearchContext.Provider>
   );
 }
