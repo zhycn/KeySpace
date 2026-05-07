@@ -1,7 +1,6 @@
 "use client";
 
 import { useApp } from "@/components/app-provider";
-import { FavoritesView } from "@/components/favorites-view";
 import { GlobalSearchResults } from "@/components/global-search-results";
 import { HomeView } from "@/components/home-view";
 import { KeywordGrid } from "@/components/keyword-grid";
@@ -23,7 +22,7 @@ export function MainContent({ keywordsMap }: MainContentProps) {
     ? (keywordsMap[currentCategoryId] ?? [])
     : [];
 
-  const showGlobalSearch = searchQuery.trim() && viewMode !== "favorites";
+  const showGlobalSearch = !!searchQuery.trim();
 
   return (
     <div className="flex flex-col h-full">
@@ -46,7 +45,6 @@ export function MainContent({ keywordsMap }: MainContentProps) {
         ) : (
           <>
             {viewMode === "home" && <HomeView />}
-            {viewMode === "favorites" && <FavoritesView />}
             {viewMode === "category" && currentCategory && (
               <div className="flex flex-col gap-4">
                 <h2 className="text-lg font-semibold">{currentCategory.name}</h2>

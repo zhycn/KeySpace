@@ -1,9 +1,8 @@
-import type { ClickRecord, FavoriteItem, UserStorage } from "./types";
+import type { ClickRecord, UserStorage } from "./types";
 
 const STORAGE_KEY = "keyspace-user-data";
 
 const defaultData: UserStorage = {
-  favorites: [],
   clickHistory: [],
   selectedEngineId: "google",
 };
@@ -45,23 +44,6 @@ export function addClickRecord(
   }
   saveUserData(data);
   return data.clickHistory;
-}
-
-export function toggleFavorite(
-  keyword: string,
-  categoryId: string,
-): FavoriteItem[] {
-  const data = loadUserData();
-  const idx = data.favorites.findIndex(
-    (f) => f.keyword === keyword && f.categoryId === categoryId,
-  );
-  if (idx >= 0) {
-    data.favorites.splice(idx, 1);
-  } else {
-    data.favorites.push({ keyword, categoryId });
-  }
-  saveUserData(data);
-  return data.favorites;
 }
 
 export function removeClickRecord(

@@ -10,7 +10,6 @@ import {
   Search,
   Share2,
   ShoppingCart,
-  Star,
   Video,
 } from "lucide-react";
 import { useApp } from "@/components/app-provider";
@@ -66,18 +65,6 @@ export function AppSidebar() {
                 >
                   <Home />
                   <span>首页</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={viewMode === "favorites"}
-                  onClick={() => {
-                    setViewMode("favorites");
-                    setSearchQuery("");
-                  }}
-                >
-                  <Star />
-                  <span>收藏</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

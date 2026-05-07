@@ -28,15 +28,9 @@ export interface ClickRecord {
   clickCount: number;
 }
 
-export interface FavoriteItem {
-  keyword: string;
-  categoryId: string;
-}
-
 export interface UserStorage {
-  favorites: FavoriteItem[];
   clickHistory: ClickRecord[];
   selectedEngineId: string;
 }
 
-export type ViewMode = "home" | "favorites" | "category";
+export type ViewMode = "home" | "category";

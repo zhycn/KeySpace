@@ -9,7 +9,7 @@ import {
   Search,
   Share2,
   ShoppingCart,
-  Trash2,
+  X,
   Video,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -227,7 +227,7 @@ export function HomeView() {
             {recommendedKeywords.map((item) => (
               <div
                 key={`${item.keyword}-${item.categoryId}`}
-                className="group inline-flex items-center gap-1.5"
+                className="group relative inline-flex items-center gap-1.5"
               >
                 <KeywordTag
                   keyword={item.keyword}
@@ -236,23 +236,21 @@ export function HomeView() {
                 {item.isRecommended ? (
                   <Badge variant="outline">推荐</Badge>
                 ) : (
-                  <>
-                    <Badge variant="secondary">{item.clickCount}次</Badge>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      aria-label="删除记录"
-                      className="hidden group-hover:flex group-focus-within:flex size-5 rounded-full"
-                      onClick={() =>
-                        handleRemoveClickRecord(
-                          item.keyword,
-                          item.categoryId,
-                        )
-                      }
-                    >
-                      <Trash2 />
-                    </Button>
-                  </>
+                  <Badge variant="secondary">{item.clickCount}次</Badge>
+                )}
+                {!item.isRecommended && (
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    aria-label="删除记录"
+                    className="absolute -top-1.5 -right-1.5 hidden group-hover:flex group-focus-within:flex size-4 rounded-full"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveClickRecord(item.keyword, item.categoryId);
+                    }}
+                  >
+                    <X />
+                  </Button>
                 )}
               </div>
             ))}
